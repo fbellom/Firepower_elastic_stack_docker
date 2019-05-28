@@ -3,7 +3,7 @@
 This is a deployment of a full Elastic stack in docker, using docker compose to orchestrate the build up and tear down of the components
 
 ## File Structure
-
+```console
 |-- docker-compose.yml
 |-- elasticsearch
 |   |-- config
@@ -23,7 +23,7 @@ This is a deployment of a full Elastic stack in docker, using docker compose to 
 |       |-- fmc_audit.conf
 |       `-- ftd_logs.conf
 `-- README.md
-
+```
 
 ## Highlights
 
