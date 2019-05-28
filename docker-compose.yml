@@ -1,0 +1,75 @@
+---
+version: '2'
+
+services:
+
+ elasticsearch:
+  build:
+   context: elasticsearch/
+  volumes:
+   - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+   - elasticsearch:/usr/share/elasticsearch/data/:rw
+  ports:
+   - "127.0.0.1:9200:9200"
+   - "127.0.0.1:9300:9300"
+  environment:
+   ES_JAVA_OPTS: "-Xmx8g -Xms8g"
+  ulimits:
+   memlock:
+    soft: -1
+    hard: -1
+  mem_limit: 16g
+  networks:
+   - elk
+
+
+ logstash:
+  build:
+   context: logstash/
+  volumes:
+   - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+   - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+  ports:
+   - "8515:8515/udp"
+   - "6514:6514/udp"
+   - "8516:8516/udp"
+   - "8517:8517/udp"
+   - "127.0.0.1:5000:5000"
+   - "127.0.0.1:9600:9600"
+  environment:
+   LS_JAVA_OPTS: "-Xmx4g -Xms4g"
+  ulimits:
+   memlock:
+    soft: -1
+    hard: -1
+  mem_limit: 8g
+  networks:
+   -  elk
+  depends_on:
+   - elasticsearch
+
+ 
+ kibana:
+  build:
+   context: kibana/
+  volumes:
+   - ./kibana/config/:/usr/share/kibana/config:ro
+  ports:
+   - "5601:5601"
+  mem_limit: 8g
+  networks:
+   - elk
+  depends_on:
+   - elasticsearch
+
+volumes:
+ elasticsearch:
+  driver: local
+
+networks:
+ elk:
+  driver: bridge
+
+ 
+ 
+ 

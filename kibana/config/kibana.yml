@@ -1,0 +1,8 @@
+---
+## Defult Kibana Config
+
+server.name: kibana
+server.host: "0"
+elasticsearch.hosts: "http://elasticsearch:9200"
+
+
